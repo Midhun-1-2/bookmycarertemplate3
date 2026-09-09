@@ -117,7 +117,7 @@ export default function SplashNav() {
             <img
               src="/brand/wordmark.png"
               alt="Book My Carer"
-              className="hidden h-8 w-auto sm:block"
+              className="h-7 w-auto sm:h-8"
             />
           </Link>
 
