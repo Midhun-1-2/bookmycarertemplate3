@@ -297,25 +297,28 @@ export default function SplashNav() {
         </motion.div>
       </header>
 
-      {/* Mobile: full-bleed panel, wiped in from the bottom-left this time — a
-          different gesture direction than Editorial Ivory's top-right circle. */}
+      {/* Mobile: full-bleed panel, rising in from the bottom-left. Transform +
+          opacity only (no `clip-path` / `backdrop-filter`) — animating a blurred
+          mask across the full viewport every frame is what was causing the
+          flicker on mobile GPUs; a plain scale/opacity reveal is compositor-only
+          and costs nothing. The panel's own background is opaque, so there's
+          nothing to blur through anyway. */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             className="fixed inset-0 z-50 lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            exit={{ opacity: 0, transition: { duration: 0.18 } }}
+            transition={{ duration: 0.2 }}
           >
             <motion.div
-              className="absolute inset-0 overflow-y-auto bg-void/97 backdrop-blur-2xl"
-              initial={{ clipPath: 'circle(0% at 2.5rem calc(100% - 2.5rem))' }}
-              animate={{ clipPath: 'circle(150% at 2.5rem calc(100% - 2.5rem))' }}
-              exit={{
-                clipPath: 'circle(0% at 2.5rem calc(100% - 2.5rem))',
-                transition: { duration: 0.4, ease: EASE_OUT_EXPO },
-              }}
-              transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+              className="absolute inset-0 overflow-y-auto bg-void"
+              style={{ transformOrigin: 'bottom left' }}
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2, ease: 'easeIn' } }}
+              transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
             >
               <BlobField tone="quiet" />
 

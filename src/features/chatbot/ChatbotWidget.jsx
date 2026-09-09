@@ -101,7 +101,11 @@ export default function ChatbotWidget({ raised = false }) {
             transition={SPRING_BOUNCY}
             style={{ transformOrigin: 'bottom right' }}
             className={cn(
-              'glass fixed right-5 z-40 flex h-[30rem] max-h-[72vh] w-[23rem] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-[32px]',
+              // Solid, not `glass`: `backdrop-filter` on a `fixed` panel renders
+              // unreliably on some mobile browsers (Brave in particular strips
+              // it for privacy), leaving the chat looking see-through instead
+              // of frosted. A plain opaque surface never has that problem.
+              'fixed right-5 z-40 flex h-[30rem] max-h-[72vh] w-[23rem] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-[32px] border border-line bg-surface shadow-[0_24px_48px_-20px_rgba(35,31,32,0.35)]',
               raised ? 'bottom-[11.5rem] lg:bottom-24' : 'bottom-24'
             )}
           >
