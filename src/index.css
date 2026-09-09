@@ -140,10 +140,16 @@
     0%, 100% { opacity: 0.6; transform: scale(1) rotate(0deg); }
     50%      { opacity: 0.95; transform: scale(1.15) rotate(6deg); }
   }
+  /* transform-only (translate3d + scale): both are compositor-only properties
+     the GPU can animate without a repaint. The blob keeps a single fixed
+     organic border-radius (set once, inline, in BlobField) rather than
+     animating it — animating `border-radius` alongside a heavy blur filter
+     forces a full repaint of that blurred region on every frame, which is
+     what was causing the flicker/jank on mobile. */
   @keyframes drift {
-    0%, 100% { transform: translate3d(0, 0, 0) scale(1); border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
-    33%      { transform: translate3d(5%, -7%, 0) scale(1.1); border-radius: 63% 37% 41% 59% / 51% 63% 37% 49%; }
-    66%      { transform: translate3d(-6%, 5%, 0) scale(0.94); border-radius: 37% 63% 56% 44% / 63% 41% 59% 37%; }
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33%      { transform: translate3d(5%, -7%, 0) scale(1.1); }
+    66%      { transform: translate3d(-6%, 5%, 0) scale(0.94); }
   }
   @keyframes float {
     0%, 100% { transform: translateY(0); }
@@ -294,8 +300,15 @@ h1, h2, h3, .font-display {
      backdrop-filter produced blank, unpainted panels in some render
      pipelines even though the DOM/computed styles looked correct. */
   background: rgba(255, 255, 255, 0.86);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  /* Promotes the panel to its own GPU compositing layer. Without this,
+     `backdrop-filter` on a sticky/fixed surface (the nav pill, bottom nav,
+     chat widget) recomputes against everything behind it on every scroll
+     tick on mobile Safari/Chrome, which is what produced the visible
+     flicker — isolating it to its own layer is the standard fix. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
   border: 1px solid rgba(244, 242, 238, 0.9);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.7),

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { ChevronDown, Menu, X, MapPin, ArrowUpRight, Sparkles } from 'lucide-react'
+import { ChevronDown, Menu, X, MapPin, ArrowUpRight, Sparkles, Home as HomeIcon, LayoutGrid } from 'lucide-react'
 import { categoriesApi } from '../../lib/mockApi'
 import { getCategoryIcon } from '../../lib/icons'
 import { getCategoryPhotoUrl } from '../../lib/categoryImages'
@@ -11,7 +11,8 @@ import { ROLE_HOME } from '../../app/roleConfig'
 import Button from '../ui/Button'
 import LanguageSwitcher from './LanguageSwitcher'
 import { cn } from '../../lib/cn'
-import { EASE_OUT_EXPO, SPRING_SOFT, collapse, stagger, fadeUp } from '../../lib/motion'
+import { EASE_OUT_EXPO, SPRING_SOFT, SPRING_BOUNCY, collapse, stagger, fadeUp } from '../../lib/motion'
+import BlobField from '../motion/BlobField'
 
 const LOCATIONS = ['Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Bengaluru', 'Chennai', 'Mumbai']
 
@@ -61,10 +62,27 @@ export default function SplashNav() {
     if (mobileOpen) setMobileOpen(false)
   }
 
+  // `overflow: hidden` on body alone doesn't stop touch-scroll on mobile
+  // Safari/Chrome — the page behind the full-screen menu still scrolls under
+  // the user's finger. Pinning the body with `position: fixed` at its current
+  // offset is the reliable cross-browser lock; scroll position is restored on
+  // close so the page doesn't jump.
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    if (!mobileOpen) return
+    const scrollY = window.scrollY
+    const { body } = document
+    body.style.position = 'fixed'
+    body.style.top = `-${scrollY}px`
+    body.style.left = '0'
+    body.style.right = '0'
+    body.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = ''
+      body.style.position = ''
+      body.style.top = ''
+      body.style.left = ''
+      body.style.right = ''
+      body.style.overflow = ''
+      window.scrollTo(0, scrollY)
     }
   }, [mobileOpen])
 
@@ -299,46 +317,69 @@ export default function SplashNav() {
               }}
               transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
             >
-              <div className="flex h-16 items-center justify-between px-5 pt-3">
+              <BlobField tone="quiet" />
+
+              <div className="relative flex h-16 items-center justify-between px-5 pt-3">
                 <img src="/brand/wordmark.png" alt="Book My Carer" className="h-9 w-auto" />
-                <button
+                <motion.button
                   onClick={() => setMobileOpen(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-slate-900/[0.03] text-slate-600"
+                  whileTap={{ scale: 0.9, rotate: 90 }}
+                  transition={SPRING_BOUNCY}
+                  className="glass flex h-9 w-9 items-center justify-center rounded-full text-slate-600"
                   aria-label={t('sidebar.closeMenu')}
                 >
-                  <X size={19} />
-                </button>
+                  <X size={16} />
+                </motion.button>
               </div>
 
               <motion.div
-                variants={stagger(0.05, 0.15)}
+                variants={stagger(0.06, 0.15)}
                 initial="hidden"
                 animate="show"
-                className="px-5 pb-16 pt-6"
+                className="relative px-5 pb-16 pt-4"
               >
                 <motion.div variants={fadeUp}>
-                  <Link
-                    to="/"
-                    className="block border-b border-line py-4 font-display text-3xl font-bold text-slate-900"
-                  >
-                    {t('nav.home')}
+                  <Link to="/" className="block">
+                    <motion.span
+                      whileTap={{ scale: 0.97 }}
+                      transition={SPRING_BOUNCY}
+                      className="glass flex items-center gap-3 rounded-2xl px-3.5 py-3"
+                    >
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500/12 text-brand-600">
+                        <HomeIcon size={15} />
+                      </span>
+                      <span className="flex-1 font-display text-[13px] font-bold text-slate-900">
+                        {t('nav.home')}
+                      </span>
+                      <ArrowUpRight size={14} className="shrink-0 text-slate-400" />
+                    </motion.span>
                   </Link>
                 </motion.div>
 
-                <motion.div variants={fadeUp} className="border-b border-line">
-                  <button
+                <motion.div variants={fadeUp} className="mt-2.5">
+                  <motion.button
                     onClick={() => setMobileSection(mobileSection === 'services' ? null : 'services')}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left font-display text-3xl font-bold text-slate-900"
+                    whileTap={{ scale: 0.97 }}
+                    transition={SPRING_BOUNCY}
+                    className={cn(
+                      'glass flex w-full cursor-pointer items-center gap-3 rounded-2xl px-3.5 py-3 text-left transition-colors duration-300',
+                      mobileSection === 'services' && 'border-brand-500/30'
+                    )}
                   >
-                    {t('nav.careTypeServices')}
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500/12 text-brand-600">
+                      <LayoutGrid size={15} />
+                    </span>
+                    <span className="flex-1 font-display text-[13px] font-bold text-slate-900">
+                      {t('nav.careTypeServices')}
+                    </span>
                     <ChevronDown
-                      size={22}
+                      size={15}
                       className={cn(
-                        'shrink-0 text-brand-500 transition-transform duration-400',
-                        mobileSection === 'services' && 'rotate-180'
+                        'shrink-0 text-slate-400 transition-transform duration-400',
+                        mobileSection === 'services' && 'rotate-180 text-brand-500'
                       )}
                     />
-                  </button>
+                  </motion.button>
                   <AnimatePresence initial={false}>
                     {mobileSection === 'services' && (
                       <motion.div
@@ -348,16 +389,18 @@ export default function SplashNav() {
                         exit="exit"
                         className="overflow-hidden"
                       >
-                        <div className="grid grid-cols-2 gap-2 pb-4">
+                        <div className="grid grid-cols-2 gap-2 pb-1 pt-2.5">
                           {categories.map((cat) => {
                             const Icon = getCategoryIcon(cat.icon)
                             return (
                               <Link
                                 key={cat.id}
                                 to={`/services/${cat.slug}`}
-                                className="flex items-center gap-2.5 rounded-2xl border border-line bg-brand-500/[0.04] px-3 py-3 text-[13px] font-medium leading-snug text-slate-700"
+                                className="flex items-center gap-2 rounded-xl border border-line bg-surface px-2.5 py-2.5 text-xs font-medium leading-snug text-slate-700 shadow-sm"
                               >
-                                <Icon size={16} className="shrink-0 text-brand-500" />
+                                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-brand-500/10 text-brand-600">
+                                  <Icon size={12} />
+                                </span>
                                 {cat.name}
                               </Link>
                             )
@@ -368,20 +411,30 @@ export default function SplashNav() {
                   </AnimatePresence>
                 </motion.div>
 
-                <motion.div variants={fadeUp} className="border-b border-line">
-                  <button
+                <motion.div variants={fadeUp} className="mt-2.5">
+                  <motion.button
                     onClick={() => setMobileSection(mobileSection === 'location' ? null : 'location')}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left font-display text-3xl font-bold text-slate-900"
+                    whileTap={{ scale: 0.97 }}
+                    transition={SPRING_BOUNCY}
+                    className={cn(
+                      'glass flex w-full cursor-pointer items-center gap-3 rounded-2xl px-3.5 py-3 text-left transition-colors duration-300',
+                      mobileSection === 'location' && 'border-brand-500/30'
+                    )}
                   >
-                    {t('nav.location')}
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500/12 text-brand-600">
+                      <MapPin size={15} />
+                    </span>
+                    <span className="flex-1 font-display text-[13px] font-bold text-slate-900">
+                      {t('nav.location')}
+                    </span>
                     <ChevronDown
-                      size={22}
+                      size={15}
                       className={cn(
-                        'shrink-0 text-brand-500 transition-transform duration-400',
-                        mobileSection === 'location' && 'rotate-180'
+                        'shrink-0 text-slate-400 transition-transform duration-400',
+                        mobileSection === 'location' && 'rotate-180 text-brand-500'
                       )}
                     />
-                  </button>
+                  </motion.button>
                   <AnimatePresence initial={false}>
                     {mobileSection === 'location' && (
                       <motion.div
@@ -391,11 +444,11 @@ export default function SplashNav() {
                         exit="exit"
                         className="overflow-hidden"
                       >
-                        <div className="flex flex-wrap gap-2 pb-4">
+                        <div className="flex flex-wrap gap-2 pb-1 pt-2.5">
                           {LOCATIONS.map((loc) => (
                             <span
                               key={loc}
-                              className="rounded-full border border-line bg-brand-500/[0.04] px-3 py-1.5 text-xs text-slate-600"
+                              className="rounded-full border border-line bg-surface px-3 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm"
                             >
                               {loc}
                             </span>
@@ -406,32 +459,34 @@ export default function SplashNav() {
                   </AnimatePresence>
                 </motion.div>
 
-                <motion.div variants={fadeUp} className="mt-6">
+                <motion.div variants={fadeUp} className="mt-5 flex justify-center">
                   <LanguageSwitcher />
                 </motion.div>
 
-                <motion.div variants={fadeUp} className="mt-6 flex flex-col gap-2.5">
+                <motion.div variants={fadeUp} className="rule-fade my-6" />
+
+                <motion.div variants={fadeUp} className="flex flex-col gap-2">
                   {session ? (
                     <Link to={ROLE_HOME[session.role]}>
-                      <Button className="w-full" size="lg" variant="secondary">
+                      <Button className="w-full" size="md" variant="secondary">
                         {t('nav.dashboard')}
                       </Button>
                     </Link>
                   ) : (
                     <>
                       <Link to="/login/user">
-                        <Button className="w-full" size="lg" variant="primary">
+                        <Button className="w-full" size="md" variant="primary">
                           {t('nav.loginBookNow')}
-                          <ArrowUpRight size={16} />
+                          <ArrowUpRight size={14} />
                         </Button>
                       </Link>
                       <Link to="/login/staff">
-                        <Button className="w-full" size="lg" variant="outline">
+                        <Button className="w-full" size="md" variant="outline">
                           {t('nav.caregiverLogin')}
                         </Button>
                       </Link>
                       <Link to="/become-a-caregiver">
-                        <Button className="w-full" size="lg" variant="ghost">
+                        <Button className="w-full" size="sm" variant="ghost">
                           {t('nav.becomeACaregiver')}
                         </Button>
                       </Link>

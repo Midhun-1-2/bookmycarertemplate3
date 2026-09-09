@@ -20,9 +20,9 @@ export default function BlobField({ className, tone = 'default' }) {
 
   return (
     <div aria-hidden className={cn('pointer-events-none absolute inset-0 -z-10 overflow-hidden', className)}>
-      <div className={cn('absolute -left-24 top-[-4rem] h-96 w-96 animate-drift rounded-full blur-[90px]', a)} />
-      <div className={cn('absolute right-[-6rem] top-1/4 h-[26rem] w-[26rem] animate-drift-slow rounded-full blur-[100px]', b)} />
-      <div className={cn('absolute bottom-[-6rem] left-1/3 h-80 w-80 animate-drift rounded-full blur-[90px] [animation-delay:-6s]', c)} />
+      <div className={cn('absolute -left-24 top-[-4rem] h-96 w-96 animate-drift rounded-full blur-[90px] will-change-transform', a)} />
+      <div className={cn('absolute right-[-6rem] top-1/4 h-[26rem] w-[26rem] animate-drift-slow rounded-full blur-[100px] will-change-transform', b)} />
+      <div className={cn('absolute bottom-[-6rem] left-1/3 h-80 w-80 animate-drift rounded-full blur-[90px] will-change-transform [animation-delay:-6s]', c)} />
     </div>
   )
 }
