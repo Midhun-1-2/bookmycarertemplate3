@@ -1,0 +1,390 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   BOOK MY CARER — "AURORA BLOOM"
+   -----------------------------------------------------------------------------
+   Built from the client's own two brand colours, exactly as specified:
+     BLACK  #231F20    RED  #DD222B
+   The site stays LIGHT throughout — black is used only as a material for a
+   handful of full-bleed bands (footer, hero brand panel), never as a page
+   background or a "dark mode". Red is the one chromatic brand colour and is
+   reserved for action and emphasis, never spent on large fields.
+
+   Where Template 2 ("Editorial Ivory") expresses this pair through hairline
+   borders, a serif display face and flat ink panels, Aurora Bloom expresses
+   the *same two colours* through an entirely different construction
+   language: soft blurred glass instead of paper, full pill/blob rounding
+   instead of small radii, a geometric-warm sans pairing instead of serif+mono,
+   and a much larger, looser motion vocabulary (drifting gradient blobs,
+   marquees, bouncier springs). Same brand, same content — a different hand.
+============================================================================= */
+
+@theme {
+  /* --- EMBER: the client red — the only chromatic brand colour ------------
+     600 is the logo red exactly. 700-800 are darker reds for text on light
+     grounds. 50-200 are soft blush fills for chips and glows. */
+  --color-brand-50: #fdf5f5;
+  --color-brand-100: #fbe5e6;
+  --color-brand-200: #f7cacc;
+  --color-brand-300: #f0a2a6;
+  --color-brand-400: #e86d73;
+  --color-brand-500: #e13d45;
+  --color-brand-600: #dd222b;
+  --color-brand-700: #b81a22;
+  --color-brand-800: #8c171d;
+  --color-brand-900: #231f20;
+  --color-brand-950: #231f20;
+
+  /* --- SURFACES --------------------------------------------------------------
+     `void` is a warm ivory canvas — light throughout, never a dark ground.
+     Glass panels sit on it as a slightly-brighter, blurred layer. */
+  --color-void: #fbf9f6;
+  --color-surface: #ffffff;
+  --color-surface-2: #f5f2ed;
+  --color-surface-3: #ebe6df;
+  --color-line: #e7e1d9;
+  --color-line-strong: #d3cabe;
+
+  /* --- INK: the client black, used only as a material for full-bleed bands - */
+  --color-ink: #231f20;
+  --color-ink-2: #2f2a2b;
+  --color-ink-3: #3c3536;
+
+  /* --- NEUTRALS: warm greys resolving to the client black at 900 ----------- */
+  --color-slate-50: #faf8f6;
+  --color-slate-100: #f2efea;
+  --color-slate-200: #e5dfd7;
+  --color-slate-300: #cec6bb;
+  --color-slate-400: #9b9391;
+  --color-slate-500: #71696a;
+  --color-slate-600: #574f50;
+  --color-slate-700: #3e3839;
+  --color-slate-800: #2d2829;
+  --color-slate-900: #231f20;
+  --color-slate-950: #120f10;
+
+  /* --- SKY: the one cool supporting note, for "in progress" states/charts -- */
+  --color-accent-50: #eef4fd;
+  --color-accent-100: #dbe8fb;
+  --color-accent-200: #bcd4f6;
+  --color-accent-300: #8fb6ee;
+  --color-accent-400: #5a8fe0;
+  --color-accent-500: #3a72c9;
+  --color-accent-600: #2c5aa6;
+  --color-accent-700: #23477f;
+
+  /* --- ROSE: danger — deeper/heavier than the brand red, so a destructive
+         action never reads as an ordinary primary button ------------------- */
+  --color-rose-50: #fdf2f2;
+  --color-rose-100: #fae0e0;
+  --color-rose-200: #f3c2c2;
+  --color-rose-300: #e69696;
+  --color-rose-400: #d16467;
+  --color-rose-500: #bb3a3e;
+  --color-rose-600: #a5111b;
+  --color-rose-700: #860f16;
+  --color-rose-800: #6b0f14;
+  --color-rose-900: #551015;
+  --color-rose-950: #2e0709;
+
+  /* --- SUCCESS / WARNING — conventional semantic hues, not brand colours --- */
+  --color-emerald-50: #edf8f2;
+  --color-emerald-100: #d4f0e2;
+  --color-emerald-200: #a8e0c6;
+  --color-emerald-300: #6cc79f;
+  --color-emerald-400: #3ba876;
+  --color-emerald-500: #2b8f61;
+  --color-emerald-600: #1f7450;
+  --color-emerald-700: #195c40;
+
+  --color-amber-50: #fdf6e7;
+  --color-amber-100: #fae9c4;
+  --color-amber-200: #f4d68d;
+  --color-amber-300: #ecbb4c;
+  --color-amber-400: #dda220;
+  --color-amber-500: #c08715;
+  --color-amber-600: #9c6c11;
+  --color-amber-700: #7c550f;
+  --color-amber-800: #5f4210;
+  --color-amber-900: #4a340f;
+
+  /* --- GOLD: star ratings only ---------------------------------------------- */
+  --color-gold-400: #f0b429;
+  --color-gold-500: #d99b16;
+  --color-gold-600: #b87f0d;
+
+  /* --- TYPE ------------------------------------------------------------------
+     A geometric-warm display face for headings/figures, a humanist workhorse
+     for body copy — the typographic opposite of Template 2's serif+mono
+     editorial pairing, built from the same two brand colours. */
+  --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Sora', 'Inter', system-ui, sans-serif;
+
+  /* --- MOTION ----------------------------------------------------------------
+     A larger vocabulary than Template 2 on purpose: blobs drift and morph,
+     chips float, borders orbit — all in the brand red plus warm gold/blue
+     glows, never introducing a new "brand" hue. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+
+  --animate-bloom: bloom 10s ease-in-out infinite;
+  --animate-drift: drift 24s ease-in-out infinite;
+  --animate-drift-slow: drift 34s ease-in-out infinite reverse;
+  --animate-float: float 5.5s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-aurora: aurora 16s ease-in-out infinite;
+
+  @keyframes bloom {
+    0%, 100% { opacity: 0.6; transform: scale(1) rotate(0deg); }
+    50%      { opacity: 0.95; transform: scale(1.15) rotate(6deg); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
+    33%      { transform: translate3d(5%, -7%, 0) scale(1.1); border-radius: 63% 37% 41% 59% / 51% 63% 37% 49%; }
+    66%      { transform: translate3d(-6%, 5%, 0) scale(0.94); border-radius: 37% 63% 56% 44% / 63% 41% 59% 37%; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to   { background-position: 200% 0; }
+  }
+  @keyframes pulse-ring {
+    0%   { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(2.15); opacity: 0; }
+  }
+  @keyframes aurora {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+}
+
+/* =============================================================================
+   BASE
+============================================================================= */
+
+html {
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-void);
+  color: var(--color-slate-600);
+  overflow-x: clip;
+}
+
+/* Ambient warmth: a soft red wash plus a whisper of gold and sky so the ivory
+   canvas has real colour drifting through it, not just a flat tint. Fixed, so
+   every page shares the same light. Kept very subtle — this is a light site,
+   not a coloured one. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(55rem 42rem at 8% -8%, rgba(221, 34, 43, 0.07), transparent 60%),
+    radial-gradient(48rem 40rem at 96% 4%, rgba(221, 34, 43, 0.045), transparent 58%),
+    radial-gradient(60rem 50rem at 50% 115%, rgba(58, 114, 201, 0.045), transparent 60%);
+}
+
+/* Fine grain to stop the gradient washes banding on large flat screens. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 0;
+}
+
+/* Sora carries the display weight; letter-spacing pulled in slightly tighter
+   than body text so large headings feel considered rather than loose. */
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-brand-600);
+  color: #fff;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-400);
+  background-clip: content-box;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =============================================================================
+   COMPONENT UTILITIES
+============================================================================= */
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@utility rule-fade {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-line-strong), transparent);
+}
+
+/* The standard elevated surface: soft, light glass over the ivory canvas.
+   Depth comes from a diffuse warm-ink shadow and a bright inner top edge
+   rather than a hairline — this is the single biggest structural difference
+   from Template 2's hairline-paper treatment, while staying just as light. */
+@utility glass {
+  /* Plain rgba rather than color-mix(): identical result, but doesn't depend
+     on CSS Color 5 support — a color-mix() background paired with
+     backdrop-filter produced blank, unpainted panels in some render
+     pipelines even though the DOM/computed styles looked correct. */
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(244, 242, 238, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 1px 2px rgba(35, 31, 32, 0.04),
+    0 24px 48px -28px rgba(35, 31, 32, 0.24);
+}
+
+/* Solid paper variant for surfaces that must stay opaque (dense console
+   tables/forms) while keeping the same soft-shadow language. */
+@utility paper {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  box-shadow:
+    0 1px 2px rgba(35, 31, 32, 0.04),
+    0 20px 40px -26px rgba(35, 31, 32, 0.22);
+}
+
+/* A panel cut from the client black — used sparingly for the footer and hero
+   closer, exactly as Template 2 uses its black bands. This is the only place
+   ink reads as a field rather than text. */
+@utility ink-panel {
+  background-color: var(--color-ink);
+  color: #ffffff;
+}
+
+@utility brand-glow {
+  box-shadow:
+    0 10px 26px -10px rgba(221, 34, 43, 0.55),
+    0 0 0 1px rgba(221, 34, 43, 0.18);
+}
+
+/* Gradient text — the one accented phrase per headline: red warming into gold
+   rather than Template 2's red-on-red ember, so it still reads as motion. */
+@utility text-brand-gradient {
+  background: linear-gradient(100deg, #dd222b 0%, #e8952a 55%, #dd222b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Animated gradient mesh — red, gold and sky, used behind hero/CTA bands.
+   Kept low-opacity wherever it's used; this is a motion accent, not a wash. */
+@utility aurora-mesh {
+  background: linear-gradient(
+    120deg,
+    var(--color-brand-500),
+    var(--color-amber-400),
+    var(--color-accent-500),
+    var(--color-brand-500)
+  );
+  background-size: 300% 300%;
+  animation: var(--animate-aurora);
+}
+
+/* Sweeping highlight for skeleton loading states. */
+@utility sheen {
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(35, 31, 32, 0.06) 45%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+/* A soft rotating gradient ring behind a panel — used for "featured" cards and
+   the auth/hero portrait frame. Sits on a pseudo-element so it can spin
+   independently of its content. */
+@utility gradient-ring {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(
+      from 0deg,
+      var(--color-brand-500),
+      var(--color-amber-400),
+      var(--color-accent-400),
+      var(--color-brand-500)
+    );
+    animation: var(--animate-spin-slow);
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
