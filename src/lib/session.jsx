@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { usersApi, staffApi, adminsApi } from './mockApi'
+import { usersApi, staffApi, adminsApi, seedDemoBookingsForUser } from './mockApi'
 
 const SESSION_KEY = 'bmc:session'
 const SessionContext = createContext(null)
@@ -34,6 +34,7 @@ export function SessionProvider({ children }) {
     if (!account) {
       account = { id: `user-${Date.now()}`, name: name || 'New Care Seeker', phone, city: '', area: '' }
       await usersApi.create(account)
+      await seedDemoBookingsForUser(account)
     }
     const next = { id: account.id, name: account.name, phone, role: 'user' }
     setSession(next)

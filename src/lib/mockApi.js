@@ -107,6 +107,101 @@ export async function createBooking(data) {
   return booking
 }
 
+function daysAgoDate(days) {
+  const d = new Date()
+  d.setDate(d.getDate() - days)
+  return d
+}
+
+function daysAgoISODate(days) {
+  return daysAgoDate(days).toISOString().slice(0, 10)
+}
+
+function daysAgoTimestamp(days, time) {
+  const [h, m] = time.split(':').map(Number)
+  const d = daysAgoDate(days)
+  d.setHours(h, m, 0, 0)
+  return d.toISOString()
+}
+
+// New seeker accounts (any phone number not already in users.json) start with an
+// empty booking history. Seed a few realistic, always-in-the-past bookings so the
+// "My Bookings" section has content to show right after a fresh demo login.
+export async function seedDemoBookingsForUser(user) {
+  const demoBookings = [
+    {
+      id: genId('booking'),
+      userId: user.id,
+      categoryId: 'cat-elder-disability',
+      serviceId: 'svc-elder-companion-care',
+      serviceName: 'Elder Companion Care',
+      staffId: 'staff-4',
+      scheduleType: 'daily',
+      startDate: daysAgoISODate(21),
+      time: '09:00',
+      address: '12 Marine Drive, Kakkanad, Kochi',
+      contactName: user.name,
+      contactPhone: user.phone,
+      emergencyContact: '',
+      careTags: ['Mobility Assistance'],
+      status: 'completed',
+      payment: { status: 'paid', amount: 1200 },
+      checkInOtp: null,
+      checkIn: daysAgoTimestamp(21, '09:05'),
+      checkOut: daysAgoTimestamp(21, '12:00'),
+      createdAt: daysAgoTimestamp(22, '09:00'),
+    },
+    {
+      id: genId('booking'),
+      userId: user.id,
+      categoryId: 'cat-nursing-clinical',
+      serviceId: 'svc-post-operative-care',
+      serviceName: 'Post-Operative Care',
+      staffId: 'staff-2',
+      scheduleType: 'daily',
+      startDate: daysAgoISODate(12),
+      time: '18:00',
+      address: '12 Marine Drive, Kakkanad, Kochi',
+      contactName: user.name,
+      contactPhone: user.phone,
+      emergencyContact: '',
+      careTags: ['Post-Surgery'],
+      status: 'completed',
+      payment: { status: 'paid', amount: 3600 },
+      checkInOtp: null,
+      checkIn: daysAgoTimestamp(12, '18:05'),
+      checkOut: daysAgoTimestamp(12, '19:00'),
+      createdAt: daysAgoTimestamp(13, '09:00'),
+    },
+    {
+      id: genId('booking'),
+      userId: user.id,
+      categoryId: 'cat-personal-daily-living',
+      serviceId: 'svc-personal-hygiene-grooming',
+      serviceName: 'Personal Hygiene & Grooming',
+      staffId: 'staff-1',
+      scheduleType: 'hourly',
+      startDate: daysAgoISODate(5),
+      time: '08:00',
+      address: '12 Marine Drive, Kakkanad, Kochi',
+      contactName: user.name,
+      contactPhone: user.phone,
+      emergencyContact: '',
+      careTags: [],
+      status: 'completed',
+      payment: { status: 'paid', amount: 900 },
+      checkInOtp: null,
+      checkIn: daysAgoTimestamp(5, '08:05'),
+      checkOut: daysAgoTimestamp(5, '11:00'),
+      createdAt: daysAgoTimestamp(6, '09:00'),
+    },
+  ]
+  for (const booking of demoBookings) {
+    await bookingsApi.create(booking)
+  }
+  return demoBookings
+}
+
 export async function matchStaffForBooking(booking) {
   const staff = await staffApi.list()
   return staff
