@@ -46,9 +46,22 @@ export default function RewardPointsCard({ history, variant = 'seeker', classNam
             </p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="font-display text-4xl font-bold leading-none tracking-tight text-slate-900">
-              <CountUp value={total} duration={1.4} />
-            </p>
+            {/* An invisible copy of the final number, in-flow, reserves the
+               exact final width up front — the animating figure is absolutely
+               positioned over it. Without this, the growing digit count
+               shrinks the flex row's available space for the text on the
+               left every frame, forcing it to keep re-wrapping mid-count. */}
+            <div className="relative">
+              <p
+                aria-hidden
+                className="invisible font-display text-4xl font-bold leading-none tracking-tight"
+              >
+                {total.toLocaleString('en-IN')}
+              </p>
+              <p className="absolute inset-0 font-display text-4xl font-bold leading-none tracking-tight text-slate-900">
+                <CountUp value={total} duration={1.4} />
+              </p>
+            </div>
             <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
               {t('rewards.pointsLabel')}
             </p>
