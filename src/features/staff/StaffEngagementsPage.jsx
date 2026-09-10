@@ -36,14 +36,14 @@ export default function StaffEngagementsPage() {
       ) : bookings.length === 0 ? (
         <Card className="mt-6 text-center text-sm text-slate-500">{t('staffEngagements.empty')}</Card>
       ) : (
-        <div className="mt-6 space-y-3">
+        <div className="mt-6 space-y-4">
           {bookings.map((b) => (
             <Link key={b.id} to={`/staff/engagements/${b.id}`}>
-              <Card interactive className="group flex items-center justify-between">
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="truncate font-semibold text-slate-900">{b.serviceName}</p>
-                    <Badge tone={STATUS_TONE[b.status]}>{t(STATUS_LABEL[b.status])}</Badge>
+              <Card interactive className="group flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="min-w-0 flex-1 truncate font-semibold text-slate-900">{b.serviceName}</p>
+                    <Badge tone={STATUS_TONE[b.status]} className="shrink-0">{t(STATUS_LABEL[b.status])}</Badge>
                   </div>
                   <p className="mt-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-slate-400">
                     <CalendarClock size={12} /> {b.startDate} · {b.time}

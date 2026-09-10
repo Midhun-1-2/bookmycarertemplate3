@@ -23,7 +23,7 @@ function Tab({ to, label, icon: Icon, count = 0 }) {
           {isActive && (
             <motion.span
               layoutId="bottomnav-active"
-              className="absolute inset-x-1 inset-y-0.5 -z-10 rounded-2xl bg-brand-600/14"
+              className="absolute inset-x-1 inset-y-0.5 z-0 rounded-2xl bg-brand-600/14"
               transition={SPRING_SOFT}
             />
           )}
@@ -31,7 +31,7 @@ function Tab({ to, label, icon: Icon, count = 0 }) {
             animate={{ y: isActive ? -1 : 0, scale: isActive ? 1.08 : 1 }}
             transition={SPRING_SOFT}
             className={cn(
-              'relative flex h-8 w-8 items-center justify-center rounded-xl transition-colors duration-300',
+              'relative z-10 flex h-8 w-8 items-center justify-center rounded-xl transition-colors duration-300',
               isActive ? 'text-brand-600' : 'text-slate-400'
             )}
           >
@@ -44,7 +44,7 @@ function Tab({ to, label, icon: Icon, count = 0 }) {
           </motion.span>
           <span
             className={cn(
-              'line-clamp-2 max-w-[66px] text-center text-[9px] font-bold leading-tight tracking-wide transition-colors duration-300',
+              'relative z-10 line-clamp-2 max-w-[66px] text-center text-[9px] font-bold leading-tight tracking-wide transition-colors duration-300',
               isActive ? 'text-slate-900' : 'text-slate-400'
             )}
           >
