@@ -17,7 +17,9 @@ export default function Magnetic({ children, strength = 12, className, as = 'div
   const sy = useSpring(y, { stiffness: 250, damping: 16, mass: 0.6 })
 
   function handleMove(e) {
-    if (reduce || !ref.current) return
+    // Same reasoning as Tilt/Spotlight: ignore touch drags so scrolling past
+    // the element doesn't drag it around with the finger.
+    if (reduce || e.pointerType !== 'mouse' || !ref.current) return
     const rect = ref.current.getBoundingClientRect()
     const dx = e.clientX - (rect.left + rect.width / 2)
     const dy = e.clientY - (rect.top + rect.height / 2)

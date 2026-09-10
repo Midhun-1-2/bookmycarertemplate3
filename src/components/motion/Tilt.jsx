@@ -20,7 +20,10 @@ export default function Tilt({ children, className, max = 7, lift = 7, scale = 1
   const rotateY = useSpring(useTransform(px, [0, 1], [-max, max]), spring)
 
   function handleMove(e) {
-    if (reduce || !ref.current) return
+    // A dragging finger fires pointermove continuously while scrolling past
+    // the card, which would jitter the tilt around mid-scroll — there's no
+    // persistent hover on touch to justify the effect there anyway.
+    if (reduce || e.pointerType !== 'mouse' || !ref.current) return
     const rect = ref.current.getBoundingClientRect()
     px.set((e.clientX - rect.left) / rect.width)
     py.set((e.clientY - rect.top) / rect.height)

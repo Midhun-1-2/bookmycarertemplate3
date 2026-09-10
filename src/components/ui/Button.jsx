@@ -55,7 +55,11 @@ export default function Button({
   }, transparent 70%)`
 
   function handleMove(e) {
-    if (!ref.current) return
+    // Skip on touch: a dragging finger fires pointermove continuously while
+    // scrolling past the button, which would repaint the highlight gradient
+    // and drag the "magnetic" offset around mid-scroll. Touch has no
+    // persistent hover to justify either effect anyway.
+    if (e.pointerType !== 'mouse' || !ref.current) return
     const rect = ref.current.getBoundingClientRect()
     mx.set(e.clientX - rect.left)
     my.set(e.clientY - rect.top)

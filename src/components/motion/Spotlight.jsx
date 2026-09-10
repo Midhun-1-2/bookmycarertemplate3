@@ -28,7 +28,12 @@ export default function Spotlight({
   const border = useMotionTemplate`radial-gradient(${radius * 0.8}px circle at ${mx}px ${my}px, rgba(221,34,43,0.5), transparent 68%)`
 
   function handleMove(e) {
-    if (disabled || !ref.current) return
+    // Touch drags fire pointermove continuously while scrolling, which would
+    // repaint this gradient (a `background` change, unlike a `transform`, is
+    // never compositor-only) on every event — exactly while the user is
+    // scrolling past these cards. There's no persistent hover on touch
+    // anyway, so the effect is skipped there rather than fought with CSS.
+    if (disabled || e.pointerType !== 'mouse' || !ref.current) return
     const rect = ref.current.getBoundingClientRect()
     mx.set(e.clientX - rect.left)
     my.set(e.clientY - rect.top)
@@ -38,7 +43,7 @@ export default function Spotlight({
     <div
       ref={ref}
       onPointerMove={handleMove}
-      onPointerEnter={() => !disabled && opacity.set(1)}
+      onPointerEnter={(e) => !disabled && e.pointerType === 'mouse' && opacity.set(1)}
       onPointerLeave={() => opacity.set(0)}
       className={cn('group relative isolate overflow-hidden', className)}
       {...props}
