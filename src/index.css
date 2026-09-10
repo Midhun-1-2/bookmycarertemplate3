@@ -316,6 +316,14 @@ h1, h2, h3, .font-display {
     0 24px 48px -28px rgba(35, 31, 32, 0.24);
 }
 
+/* Same GPU-layer promotion as `.glass` above, for the few sticky headers that
+   use a raw `backdrop-blur-*` utility instead of `.glass` — without it they
+   get the identical scroll-flicker on mobile Safari/Chrome. */
+@utility gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
 /* Solid paper variant for surfaces that must stay opaque (dense console
    tables/forms) while keeping the same soft-shadow language. */
 @utility paper {

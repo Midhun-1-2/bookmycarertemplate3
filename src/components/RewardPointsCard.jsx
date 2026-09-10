@@ -30,7 +30,7 @@ export default function RewardPointsCard({ history, variant = 'seeker', classNam
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 animate-bloom rounded-full bg-brand-600/20 blur-[60px]"
+          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 animate-bloom rounded-full bg-brand-600/20 blur-[60px] will-change-transform"
         />
 
         <div className="relative flex items-start justify-between gap-4">

@@ -130,7 +130,7 @@ export default function ServiceDetailPage() {
           <div className="relative overflow-hidden rounded-[28px] border border-brand-500/25 bg-gradient-to-br from-brand-500/[0.09] via-surface to-surface p-6 sm:p-8">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 animate-bloom rounded-full bg-brand-500/20 blur-[70px]"
+              className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 animate-bloom rounded-full bg-brand-500/20 blur-[70px] will-change-transform"
             />
             <div className="relative flex flex-wrap items-end justify-between gap-8">
               <div>
